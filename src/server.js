@@ -1,9 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
-import questionRoutes from './routes/quesstionRoutes';
+import questionRoutes from './routes/quesstionRoutes.js';
 import cors from 'cors';
-import { connectDb } from './db';
+import { connectDb } from './db.js';
 
 dotenv.config();
 

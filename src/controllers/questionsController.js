@@ -1,4 +1,4 @@
-import Question from '../models/Question';
+import Question from '../models/Question.js';
 
 export const getQuestions = async (req, res) => {
   const feed = await Question.find();
