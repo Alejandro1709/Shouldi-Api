@@ -1,11 +1,11 @@
 import mongoose, { Schema } from 'mongoose';
+import slugify from 'slugify';
 
 const questionSchema = new Schema(
   {
     title: {
       type: String,
       required: [true, 'Provide a title for this question'],
-      maxLength: 45,
     },
     slug: {
       type: String,
@@ -13,7 +13,6 @@ const questionSchema = new Schema(
     content: {
       type: String,
       required: [true, 'Provide a content for this question'],
-      maxLength: 60,
     },
     upvotes: {
       type: Number,
@@ -34,5 +33,14 @@ const questionSchema = new Schema(
     timestamps: true,
   }
 );
+
+questionSchema.pre('save', function (next) {
+  if (!this.isModified('title')) {
+    next();
+  }
+
+  this.slug = slugify(this.title).toLowerCase();
+  next();
+});
 
 export default mongoose.model('Question', questionSchema);
