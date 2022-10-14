@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import questionRoutes from './routes/quesstionRoutes.js';
 import cors from 'cors';
-import { connectDb } from './db.js';
+import { connectDb } from './db/index.js';
 
 dotenv.config();
 
