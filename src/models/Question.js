@@ -7,6 +7,9 @@ const questionSchema = new Schema(
       required: [true, 'Provide a title for this question'],
       maxLength: 45,
     },
+    slug: {
+      type: String,
+    },
     content: {
       type: String,
       required: [true, 'Provide a content for this question'],
