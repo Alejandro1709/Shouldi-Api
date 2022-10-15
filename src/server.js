@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
+import helmet from 'helmet';
 import questionRoutes from './routes/quesstionRoutes.js';
 import cors from 'cors';
 import { notFound, globalError } from './controllers/errorController.js';
@@ -21,6 +22,7 @@ connectDb(uri);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
+app.use(helmet());
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
