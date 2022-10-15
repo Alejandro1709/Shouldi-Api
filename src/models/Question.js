@@ -17,12 +17,10 @@ const questionSchema = new Schema(
     upvotes: {
       type: Number,
       default: 0,
-      min: 1,
     },
     downvotes: {
       type: Number,
       default: 0,
-      min: 1,
     },
     owner: {
       type: Schema.Types.ObjectId,
