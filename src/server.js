@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import questionRoutes from './routes/quesstionRoutes.js';
 import cors from 'cors';
+import { notFound, globalError } from './controllers/errorController.js';
 import { connectDb } from './db/index.js';
 
 dotenv.config();
@@ -33,22 +34,9 @@ app.get('/', (req, res) => {
 
 // ERROR HANDLING
 
-app.all('*', (req, res, next) => {
-  const error = new Error('This route does not exists!');
-  error.status = 'fail';
-  error.statusCode = 404;
-  next(error);
-});
+app.all('*', notFound);
 
-app.use((err, req, res, next) => {
-  err.statusCode = err.statusCode || 500;
-  err.status = err.status || 'error';
-
-  res.status(err.statusCode).json({
-    status: err.status,
-    message: err.message,
-  });
-});
+app.use(globalError);
 
 const PORT = process.env.PORT || 4020;
 
