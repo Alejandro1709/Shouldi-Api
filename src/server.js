@@ -2,8 +2,12 @@ import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import questionRoutes from './routes/quesstionRoutes.js';
+import mongoSanitize from 'express-mongo-sanitize';
+import xss from 'xss-clean';
 import cors from 'cors';
+import hpp from 'hpp';
 import { notFound, globalError } from './controllers/errorController.js';
 import { connectDb } from './db/index.js';
 
@@ -25,10 +29,20 @@ const uri =
 connectDb(uri);
 
 // Middlewares
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many requests from this IP, please try again in an hour',
+});
+
+app.use('/api', limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.use(helmet());
+app.use(mongoSanitize());
+app.use(xss());
+app.use(hpp());
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
