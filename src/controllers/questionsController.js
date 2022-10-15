@@ -1,4 +1,5 @@
 import Question from '../models/Question.js';
+import AppError from '../utils/AppError.js';
 import catchAsync from '../utils/catchAsync.js';
 
 export const getQuestions = catchAsync(async (req, res, next) => {
@@ -6,8 +7,13 @@ export const getQuestions = catchAsync(async (req, res, next) => {
   res.status(200).json(feed);
 });
 
-export const getQuestion = catchAsync(async (req, res) => {
+export const getQuestion = catchAsync(async (req, res, next) => {
   const feed = await Question.findOne({ slug: req.params.slug });
+
+  if (!feed) {
+    return next(new AppError('This question does not exists!', 404));
+  }
+
   res.status(200).json(feed);
 });
 
@@ -41,11 +47,20 @@ export const updateQuestion = catchAsync(async (req, res) => {
     }
   );
 
+  if (!question) {
+    return next(new AppError('This question does not exists!', 404));
+  }
+
   res.status(200).json(question);
 });
 
 export const deleteQuestion = catchAsync(async (req, res) => {
   const question = await Question.findOneAndRemove({ slug: req.params.slug });
+
+  if (!question) {
+    return next(new AppError('This question does not exists!', 404));
+  }
+
   req.status(200).json({ message: 'Question Removed!' });
 });
 
