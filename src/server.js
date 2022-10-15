@@ -33,6 +33,23 @@ app.get('/', (req, res) => {
 
 // ERROR HANDLING
 
+app.all('*', (req, res, next) => {
+  const error = new Error('This route does not exists!');
+  error.status = 'fail';
+  error.statusCode = 404;
+  next(error);
+});
+
+app.use((err, req, res, next) => {
+  err.statusCode = err.statusCode || 500;
+  err.status = err.status || 'error';
+
+  res.status(err.statusCode).json({
+    status: err.status,
+    message: err.message,
+  });
+});
+
 const PORT = process.env.PORT || 4020;
 
 app.listen(PORT, () => console.log(`Server is up and running on port ${PORT}`));
