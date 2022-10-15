@@ -1,9 +1,17 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
+import helmet from 'helmet';
 import questionRoutes from './routes/quesstionRoutes.js';
 import cors from 'cors';
+import { notFound, globalError } from './controllers/errorController.js';
 import { connectDb } from './db/index.js';
+
+process.on('uncaughtException', (err) => {
+  console.log('UNCAUGHT EXCEPTION! 🔥 Shutting down...');
+  console.log(err.name, err.message);
+  process.exit(1);
+});
 
 dotenv.config();
 
@@ -20,6 +28,7 @@ connectDb(uri);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
+app.use(helmet());
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -33,6 +42,20 @@ app.get('/', (req, res) => {
 
 // ERROR HANDLING
 
+app.all('*', notFound);
+
+app.use(globalError);
+
 const PORT = process.env.PORT || 4020;
 
-app.listen(PORT, () => console.log(`Server is up and running on port ${PORT}`));
+const server = app.listen(PORT, () =>
+  console.log(`Server is up and running on port ${PORT}`)
+);
+
+process.on('unhandledRejection', (err) => {
+  console.log('UNHANDLED REJECTION! 🔥 Shutting down...');
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});
