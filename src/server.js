@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import questionRoutes from './routes/quesstionRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 import mongoSanitize from 'express-mongo-sanitize';
 import xss from 'xss-clean';
 import cors from 'cors';
@@ -51,6 +52,7 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use('/api/v1/questions', questionRoutes);
 app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/auth', authRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello');
