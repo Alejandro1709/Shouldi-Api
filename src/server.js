@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import questionRoutes from './routes/quesstionRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 import mongoSanitize from 'express-mongo-sanitize';
 import xss from 'xss-clean';
 import cors from 'cors';
@@ -49,6 +50,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use('/api/v1/questions', questionRoutes);
+app.use('/api/v1/users', userRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello');
