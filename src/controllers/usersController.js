@@ -1,6 +1,7 @@
 import User from '../models/User.js';
 import AppError from '../utils/AppError.js';
 import catchAsync from '../utils/catchAsync.js';
+import generateToken from '../utils/generateToken.js';
 
 export const register = catchAsync(async (req, res, next) => {
   const { name, username, email, password } = req.body;
@@ -22,6 +23,6 @@ export const register = catchAsync(async (req, res, next) => {
     name: newUser.name,
     username: newUser.username,
     email: newUser.email,
-    token: undefined,
+    token: generateToken(newUser.id),
   });
 });

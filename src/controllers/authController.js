@@ -1,6 +1,7 @@
 import User from '../models/User.js';
 import AppError from '../utils/AppError.js';
 import catchAsync from '../utils/catchAsync.js';
+import generateToken from '../utils/generateToken.js';
 
 export const login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
@@ -12,7 +13,7 @@ export const login = catchAsync(async (req, res, next) => {
       name: user.name,
       username: user.username,
       email: user.email,
-      token: undefined,
+      token: generateToken(user.id),
     });
   } else {
     return next(new AppError('Invalid Credentials', 401));
