@@ -4,7 +4,9 @@ import catchAsync from '../utils/catchAsync.js';
 import generateToken from '../utils/generateToken.js';
 
 export const getProfile = catchAsync(async (req, res, next) => {
-  const user = await User.findById(req.user.id).select('-password');
+  const user = await User.findById(req.user.id)
+    .select('-password')
+    .populate('questions');
   res.json(user);
 });
 
