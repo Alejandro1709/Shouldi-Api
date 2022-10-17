@@ -3,6 +3,13 @@ import AppError from '../utils/AppError.js';
 import catchAsync from '../utils/catchAsync.js';
 import generateToken from '../utils/generateToken.js';
 
+export const getProfile = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user.id)
+    .select('-password')
+    .populate('questions');
+  res.json(user);
+});
+
 export const login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 

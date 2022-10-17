@@ -6,15 +6,16 @@ import {
   updateQuestion,
   deleteQuestion,
 } from '../controllers/questionsController.js';
+import { protect } from '../middlewares/authMiddleware.js';
 
 const router = Router();
 
-router.route('/').get(getQuestions).post(createQuestion);
+router.route('/').get(getQuestions).post(protect, createQuestion);
 
 router
   .route('/:slug')
   .get(getQuestion)
-  .patch(updateQuestion)
-  .delete(deleteQuestion);
+  .patch(protect, updateQuestion)
+  .delete(protect, deleteQuestion);
 
 export default router;
