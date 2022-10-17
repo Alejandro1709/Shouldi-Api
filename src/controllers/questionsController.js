@@ -1,4 +1,5 @@
 import Question from '../models/Question.js';
+import User from '../models/User.js';
 import AppError from '../utils/AppError.js';
 import catchAsync from '../utils/catchAsync.js';
 
@@ -20,12 +21,17 @@ export const getQuestion = catchAsync(async (req, res, next) => {
 export const createQuestion = catchAsync(async (req, res) => {
   const { title, content, upvotes, downvotes } = req.body;
 
+  const user = await User.findById(req.user.id).select('-password');
+
   const question = await Question.create({
     title,
     content,
-    upvotes,
-    downvotes,
+    owner: user,
   });
+
+  user.questions.push(question.id);
+
+  await user.save();
 
   res.status(200).json(question);
 });
