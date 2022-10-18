@@ -24,6 +24,12 @@ const userSchema = new Schema({
     required: [true, 'Please provide a password'],
     trim: true,
   },
+  questions: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Question',
+    },
+  ],
 });
 
 userSchema.pre('save', async function (next) {
