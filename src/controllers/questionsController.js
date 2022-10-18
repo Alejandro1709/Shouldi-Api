@@ -4,7 +4,7 @@ import AppError from '../utils/AppError.js';
 import catchAsync from '../utils/catchAsync.js';
 
 export const getQuestions = catchAsync(async (req, res, next) => {
-  const feed = await Question.find().populate('owner');
+  const feed = await Question.find().populate('owner', '-password');
   res.status(200).json(feed);
 });
 

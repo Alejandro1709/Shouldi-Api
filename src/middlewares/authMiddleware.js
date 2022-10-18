@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/AppError.js';
+import Question from '../models/Question.js';
 
 export const protect = catchAsync(async (req, res, next) => {
   let token;
@@ -38,4 +39,16 @@ export const protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-export const questionOwner = async (req, res, next) => {};
+export const questionOwner = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+
+  const question = await Question.findOne({ slug: req.params.slug }).populate(
+    'owner'
+  );
+
+  if (question.owner.id.toString() !== user.id.toString()) {
+    return next(new AppError('You dont have access to this resource', 403));
+  }
+
+  next();
+});

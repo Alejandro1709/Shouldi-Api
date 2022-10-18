@@ -6,7 +6,7 @@ import {
   updateQuestion,
   deleteQuestion,
 } from '../controllers/questionsController.js';
-import { protect } from '../middlewares/authMiddleware.js';
+import { protect, questionOwner } from '../middlewares/authMiddleware.js';
 
 const router = Router();
 
@@ -15,7 +15,7 @@ router.route('/').get(getQuestions).post(protect, createQuestion);
 router
   .route('/:slug')
   .get(getQuestion)
-  .patch(protect, updateQuestion)
-  .delete(protect, deleteQuestion);
+  .patch(protect, questionOwner, updateQuestion)
+  .delete(protect, questionOwner, deleteQuestion);
 
 export default router;
