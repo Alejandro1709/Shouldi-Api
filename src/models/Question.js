@@ -22,6 +22,18 @@ const questionSchema = new Schema(
       type: Number,
       default: 0,
     },
+    upvoters: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+    downvoters: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
     owner: {
       type: Schema.Types.ObjectId,
       ref: 'User',

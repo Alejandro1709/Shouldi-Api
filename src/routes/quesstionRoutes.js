@@ -5,6 +5,8 @@ import {
   createQuestion,
   updateQuestion,
   deleteQuestion,
+  upvoteQuestion,
+  downvoteQuestion,
 } from '../controllers/questionsController.js';
 import { protect, questionOwner } from '../middlewares/authMiddleware.js';
 
@@ -17,5 +19,9 @@ router
   .get(getQuestion)
   .patch(protect, questionOwner, updateQuestion)
   .delete(protect, questionOwner, deleteQuestion);
+
+router.put('/:slug/upvote', protect, upvoteQuestion);
+
+router.put('/:slug/downvote', protect, downvoteQuestion);
 
 export default router;
